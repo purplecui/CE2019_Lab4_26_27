@@ -39,4 +39,5 @@ public:
   int degree();
   void neighbours(Vertex vertex);
   bool areNeighbours(Vertex vertexOne, Vertex vertexTwo);
+  void vertices();
 };
