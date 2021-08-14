@@ -2,9 +2,9 @@
 #include <iostream>
 
 int main() {
-  Graph graph;
-  std::cout << graph.isDirected() << std::endl;
-  std::cout << graph.isEmpty() << std::endl;
+  Graph graph(true);
+  // std::cout << graph.isDirected() << std::endl;
+  // std::cout << graph.isEmpty() << std::endl;
 
   //   int *a;
   //   int b = 5;
@@ -27,4 +27,14 @@ int main() {
   graph.addVertex(five);
   graph.addVertex(six);
   graph.vertices();
+  std::cout << "Are neighboours: " << graph.areNeighbours(four, three)
+            << std::endl;
+  std::cout << "Indegree: " << graph.inDegree(two) << std::endl;
+  std::cout << "Total vertices: " << graph.totalVertices() << std::endl;
+  graph.removeVertex(two);
+  std::cout << "Total vertices: " << graph.totalVertices() << std::endl;
+  graph.removeVertex(three);
+  graph.removeVertex(four);
+  std::cout << "Total vertices: " << graph.totalVertices() << std::endl;
+
 }
