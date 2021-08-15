@@ -19,7 +19,6 @@ private:
   Vertex *HEAD;
   bool isDiGraph;
   int edgeCount;
-  // std::vector<Edge *> edges;
 
 public:
   Graph() : edgeCount(0), HEAD(nullptr), isDiGraph(true) {}
@@ -39,6 +38,9 @@ public:
 
   // Returns the total no of degree of a vertex
   int degree(Vertex vertex);
+
+  // Prints out the adjacency list
+  void adjacencyList();
 
   /* Solo
    */
