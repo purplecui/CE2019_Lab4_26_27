@@ -224,6 +224,48 @@ void Graph::removeEdge(Vertex fromVertex, Vertex toVertex) {
     throw std::string("Cannot remove edge, One or more vertices doesnot exist");
 }
 
+void Graph::removeEdges(Vertex &vertex) {
+
+  Vertex *temp = HEAD;
+  while (temp != nullptr) {
+    if (temp->key == vertex.key) {
+      temp = temp->next;
+      continue;
+    }
+
+    Vertex *tempRight = temp->right;
+
+    while (tempRight != nullptr) {
+      if (tempRight->key == vertex.key) {
+        Vertex *edgeToDelete = tempRight;
+        tempRight->left->right = tempRight->right;
+        if (edgeToDelete->right != nullptr)
+          tempRight->right->left = tempRight->left;
+
+        tempRight = tempRight->left->right;
+        delete edgeToDelete;
+        edgeCount--;
+        break;
+      }
+      tempRight = tempRight->right;
+    }
+    temp = temp->next;
+  }
+}
+
+int Graph::totalEdges() {
+  int totalEdges = 0;
+  Vertex *temp = HEAD;
+  while (temp != nullptr) {
+    Vertex *tempRight = temp->right;
+    while (tempRight != nullptr) {
+      totalEdges++;
+      tempRight = tempRight->right;
+    }
+    temp = temp->next;
+  }
+  return edgeCount;
+}
 
 void Graph::vertices() {
   Vertex *tempDown = HEAD;
@@ -268,6 +310,47 @@ int Graph::inDegree(Vertex vertex) {
   }
   return inDegree;
 }
+
+int Graph::outDegree(Vertex vertex) {
+  int outDegree = 0;
+  Vertex *temp = HEAD;
+  while (temp != nullptr && vertex.key != temp->key) {
+    temp = temp->next;
+  }
+  if (temp == nullptr)
+    throw std::string("The vertex doesnot exist");
+
+  temp = temp->right;
+  while (temp != nullptr) {
+    temp = temp->right;
+    outDegree++;
+  }
+  return outDegree;
+}
+
+
+int Graph::degree(Vertex vertex) {
+  int inDeg = inDegree(vertex);
+  int outDeg = outDegree(vertex);
+  return inDeg + outDeg;
+}
+
+
+void Graph::neighbours(Vertex vertex) {
+  Vertex *temp = HEAD;
+  while (temp != nullptr && temp->key != vertex.key) {
+    temp = temp->next;
+  }
+  if (temp == nullptr)
+    throw std::string("The given vertex doesnot exist");
+  temp = temp->right;
+  while (temp != nullptr) {
+    std::cout << temp->key << " ";
+    temp = temp->right;
+  }
+  std::cout << "\n";
+}
+
 
 bool Graph::areNeighbours(Vertex vertexOne, Vertex vertexTwo) {
 
