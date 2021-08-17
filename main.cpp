@@ -22,6 +22,7 @@ int main() {
   std::cout << std::endl;
   graph.addEdge(one, six);
   graph.addEdge(one, five);
+
   graph.addEdge(one, two);
   graph.addEdge(two, three);
   graph.addEdge(two, six);
@@ -60,6 +61,7 @@ int main() {
   graph.removeEdge(five, two);
   std::cout << "\nAfter removing five, two\n" << std::endl;
   std::cout << "Total Edges: " << graph.totalEdges() << std::endl;
+  graph.adjacencyList();
 
   graph.removeVertex(two);
   std::cout << "\nAfter removing vertex two\n" << std::endl;
@@ -69,9 +71,7 @@ int main() {
   graph.removeEdge(one, five);
   std::cout << "\nAfter removing one, five\n" << std::endl;
   std::cout << "Total Edges: " << graph.totalEdges() << std::endl;
-
-
-  std::cout<< graph.totalEdges();
+  graph.adjacencyList();
 
   graph.removeVertex(three);
   std::cout << "\nAfter removing vertex three\n" << std::endl;
@@ -82,4 +82,5 @@ int main() {
   std::cout << "\nAfter removing vertex four\n" << std::endl;
   graph.adjacencyList();
   std::cout << "Total vertices: " << graph.totalVertices() << std::endl;
+  std::cout << "Total Edges: " << graph.totalEdges() << std::endl;
 }

@@ -56,7 +56,7 @@ public:
 
   // Removes a vertex and it's related edges
   void removeVertex(Vertex vertexToRemove); // Saskar
-  void removeEdges(Vertex &vertex);         // Saskar
+  int removeEdges(Vertex &vertex);         // Saskar
 
   // Removes an edge from the graph
   void removeEdge(Vertex fromVertex, Vertex toVertex); // Gaurav
