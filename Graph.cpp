@@ -54,81 +54,153 @@ bool Graph::edgeExists(Vertex from, Vertex to) {
   return false;
 }
 
+
 void Graph::addEdge(Vertex fromVertex, Vertex toVertex) {
 
-  // check if vertex exists
-  bool fromExists = keyExists(fromVertex.key);
-  bool ToExists = keyExists(toVertex.key);
+  // check if the two vertices exists
+  Vertex *from = nullptr;
+  Vertex *to = nullptr;
   Vertex *temp = HEAD;
-
-  if (fromExists && ToExists) {
-    if (!edgeExists(fromVertex, toVertex)) {
-
-      if (isDirected()) {
-        Vertex *newEdge = new Vertex(toVertex);
-        Vertex *temp = HEAD;
-
-        // traversing down to find the vertex
-        while (temp != nullptr && temp->key != fromVertex.key) {
-          temp = temp->next;
-        }
-        // add to head
-        if (temp->right == nullptr) {
-          temp->right = newEdge;
-          newEdge->left = temp;
-        } else {
-          newEdge->right = temp->right;
-          temp->right->left = newEdge;
-          newEdge->left = temp;
-          temp->right = newEdge;
-        }
-      } else {
-        // if undirected then we add 2 edges
-        Vertex *newEdgeOne = new Vertex(toVertex);
-        Vertex *newEdgeTwo = new Vertex(fromVertex);
-        Vertex *temp = HEAD;
-
-        // traversing down the find the vertices
-        while (temp != nullptr) {
-
-          if (temp->key == fromVertex.key) {
-            // found the 1st vertex
-            // add to head
-            if (temp->right == nullptr) {
-              temp->right = newEdgeOne;
-              newEdgeOne->left = temp;
-            } else {
-              newEdgeOne->right = temp->right;
-              temp->right->left = newEdgeOne;
-              newEdgeOne->left = temp;
-              temp->right = newEdgeOne;
-            }
-            temp = temp->next;
-          } else if (temp->key == toVertex.key) {
-            // found the 2nd vertex
-            // add to head
-            if (temp->right == nullptr) {
-              temp->right = newEdgeTwo;
-              newEdgeTwo->left = temp;
-            } else {
-              newEdgeTwo->right = temp->right;
-              temp->right->left = newEdgeTwo;
-              newEdgeTwo->left = temp;
-              temp->right = newEdgeTwo;
-            }
-            temp = temp->next;
-
-          } else
-            temp = temp->next;
-        }
-      }
-      edgeCount++; // update the edge count
-    } else {
-      throw std::string("Cannot add edge, The edge already exists");
-    }
-  } else
+  while (temp != nullptr) {
+    if (temp->key == fromVertex.key)
+      from = temp;
+    if (temp->key == toVertex.key)
+      to = temp;
+    temp = temp->next;
+  }
+  if (!from || !to)
     throw std::string("Cannot add edge, One or more vertices doesnot exist");
+
+  // check if the edge exists
+  bool exists = edgeExists(fromVertex, toVertex);
+
+  if (exists)
+    throw std::string("Edge already exists");
+
+  if (isDirected()) {
+    Vertex *newEdge = new Vertex(toVertex);
+    // add to head
+    if (from->right == nullptr) {
+      from->right = newEdge;
+      newEdge->left = from;
+    } else {
+      newEdge->right = from->right;
+      from->right->left = newEdge;
+      from->right = newEdge;
+      newEdge->left = from;
+    }
+  } else {
+    // for undirected we add 2 edges
+    Vertex *newEdgeOne = new Vertex(toVertex);
+    Vertex *newEdgeTwo = new Vertex(fromVertex);
+    // add to head of vertex 1
+    if (from->right == nullptr) {
+      from->right = newEdgeOne;
+      newEdgeOne->left = from;
+    } else {
+      newEdgeOne->right = from->right;
+      from->right->left = newEdgeOne;
+      from->right = newEdgeOne;
+      newEdgeOne->left = from;
+    }
+
+    // add to head of vertex 2
+    if (to->right == nullptr) {
+      to->right = newEdgeTwo;
+      newEdgeTwo->left = to;
+    } else {
+      newEdgeTwo->right = to->right;
+      to->right->left = newEdgeTwo;
+      to->right = newEdgeTwo;
+      newEdgeTwo->left = to;
+    }
+  }
+  edgeCount++; // update the edge counts
 }
+
+
+void Graph::removeEdge(Vertex fromVertex, Vertex toVertex) {
+
+  // check if the two vertices exists
+  Vertex *from = nullptr;
+  Vertex *to = nullptr;
+  Vertex *temp = HEAD;
+  while (temp != nullptr) {
+    if (temp->key == fromVertex.key)
+      from = temp;
+    if (temp->key == toVertex.key)
+      to = temp;
+    temp = temp->next;
+  }
+  if (!from || !to)
+    throw std::string("Cannot add edge, One or more vertices doesnot exist");
+
+  // check if the edge exists
+  bool exists = edgeExists(fromVertex, toVertex);
+
+  if (!exists)
+    throw std::string("Edge already exists");
+
+  if (isDirected()) {
+    Vertex *edges = from->right;
+
+    // traversing right until the edge id found and deleting it
+    while (edges != nullptr) {
+      if (edges->key == toVertex.key) {
+        // edge found
+        Vertex *edgeToDelete = edges;
+        edges->left->right = edges->right;
+        if (edgeToDelete->right != nullptr)
+          edges->right->left = edges->left;
+
+        edges = edges->left->right;
+        delete edgeToDelete;
+        break;
+      }
+      edges = edges->right;
+    }
+  } else {
+    // for undirected we delete 2 edges
+    Vertex *edges = from->right;
+
+    // traversing right until the edge of vertex 1 is found and deleting it
+    while (edges != nullptr) {
+      if (edges->key == toVertex.key) {
+        // edge found
+        Vertex *edgeToDelete = edges;
+        edges->left->right = edges->right;
+        if (edgeToDelete->right != nullptr)
+          edges->right->left = edges->left;
+
+        edges = edges->left->right;
+        delete edgeToDelete;
+        break;
+      }
+      edges = edges->right;
+    }
+
+    edges = to->right;
+
+    // traversing right until the edge of vertex 2 is found and deleting it
+    while (edges != nullptr) {
+      if (edges->key == fromVertex.key) {
+        // edge found
+        Vertex *edgeToDelete = edges;
+        edges->left->right = edges->right;
+        if (edgeToDelete->right != nullptr)
+          edges->right->left = edges->left;
+
+        edges = edges->left->right;
+        delete edgeToDelete;
+        break;
+      }
+      edges = edges->right;
+    }
+  }
+  edgeCount--;
+}
+
+
 
 void Graph::removeVertex(Vertex vertexToRemove) {
   Vertex *temp = HEAD;
@@ -170,129 +242,6 @@ void Graph::removeVertex(Vertex vertexToRemove) {
 
   // remove the vertex itself
   delete temp;
-}
-
-int Graph::removeEdges(Vertex &vertex) {
-  int totalEdgesRemoved = 0;
-  Vertex *temp = HEAD;
-  // traversing down the vertices
-  while (temp != nullptr) {
-    if (temp->key == vertex.key) {
-      temp = temp->next;
-      continue; // no need to check the right for the vertex which need to be
-                // deleted
-    }
-
-    Vertex *tempRight = temp->right;
-
-    /* traversing right for each vertex and checking if an edge with the given
-    vertex exists. If it does, we delete it
-    */
-    while (tempRight != nullptr) {
-      if (tempRight->key == vertex.key) {
-        // edge is found
-        Vertex *edgeToDelete = tempRight;
-        tempRight->left->right = tempRight->right;
-        if (edgeToDelete->right != nullptr)
-          tempRight->right->left = tempRight->left;
-
-        tempRight = tempRight->left->right;
-        delete edgeToDelete; // handling the pointers, deleting the edge and
-                             // breaking out of the right traversal
-
-        totalEdgesRemoved++; // update the edge count
-        break;
-      }
-      tempRight = tempRight->right;
-    }
-    temp = temp->next;
-  }
-  return totalEdgesRemoved; // return the total edges removed
-}
-
-void Graph::removeEdge(Vertex fromVertex, Vertex toVertex) {
-
-  // check if vertex exists
-  bool fromExists = keyExists(fromVertex.key);
-  bool ToExists = keyExists(toVertex.key);
-  Vertex *temp = HEAD;
-
-  if (fromExists && ToExists) {
-    if (edgeExists(fromVertex, toVertex)) {
-      if (isDirected()) {
-        // traverse down to find the vertex
-        Vertex *temp = HEAD;
-        while (temp != nullptr && temp->key != fromVertex.key) {
-          temp = temp->next;
-        }
-
-        temp = temp->right;
-        // traversing right to find the edge and delete it
-        while (temp != nullptr) {
-          if (temp->key == toVertex.key) {
-            // edge to delete found
-            Vertex *edgeToDelete = temp;
-            temp->left->right = temp->right;
-            if (edgeToDelete->right != nullptr)
-              temp->right->left = temp->left;
-
-            temp = temp->left->right;
-            delete edgeToDelete;
-            break;
-          }
-          temp = temp->right;
-        }
-      } else {
-        // if undirected then we remove 2 edges
-
-        Vertex *temp = HEAD;
-
-        // traversing down to find the vertices
-        while (temp != nullptr) {
-          Vertex *tempRight = temp;
-
-          if (temp->key == fromVertex.key) {
-            // vertex one found
-            // traversing right to find the edge and deleting it
-            while (tempRight != nullptr) {
-              if (tempRight->key == toVertex.key) {
-                Vertex *edgeToDelete = tempRight;
-                tempRight->left->right = tempRight->right;
-                if (edgeToDelete->right != nullptr)
-                  tempRight->right->left = tempRight->left;
-                tempRight = tempRight->left->right;
-                delete edgeToDelete;
-                break;
-              }
-              tempRight = tempRight->right;
-            }
-          }
-
-          if (temp->key == toVertex.key) {
-            // vertex two found
-            // traversing right to find the edge and deleting it
-            while (tempRight != nullptr) {
-              if (tempRight->key == fromVertex.key) {
-                Vertex *edgeToDelete = tempRight;
-                tempRight->left->right = tempRight->right;
-                if (edgeToDelete->right != nullptr)
-                  tempRight->right->left = tempRight->left;
-                tempRight = tempRight->left->right;
-                delete edgeToDelete;
-                break;
-              }
-              tempRight = tempRight->right;
-            }
-          }
-          temp = temp->next;
-        }
-      }
-      edgeCount--; // update the edge count
-    } else {
-      throw std::string("Cannot remove edge, The edge doesnot exists");
-    }
-  } else
-    throw std::string("Cannot remove edge, One or more vertices doesnot exist");
 }
 
 void Graph::vertices() {
