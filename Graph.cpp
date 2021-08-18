@@ -111,6 +111,8 @@ void Graph::addEdge(Vertex fromVertex, Vertex toVertex,
   edgeCount++; // update the edge counts
 }
 
+
+
 void Graph::removeVertex(Vertex vertexToRemove) {
   Vertex *temp = HEAD;
   Vertex *parent = nullptr;
