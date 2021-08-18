@@ -2,85 +2,101 @@
 #include <iostream>
 
 int main() {
-  Graph graph(false);
-  Vertex one(10);
-  Vertex two(88);
-  Vertex three(43);
-  Vertex four(29);
-  Vertex five(19);
-  Vertex six(78);
-  graph.addVertex(one);
-  graph.addVertex(two);
-  graph.addVertex(three);
-  graph.vertices();
-  std::cout << "Total vertices: " << graph.totalVertices() << std::endl;
-  graph.addVertex(four);
-  graph.addVertex(five);
-  graph.addVertex(six);
-  graph.vertices();
-  std::cout << "Total vertices: " << graph.totalVertices() << std::endl;
-  std::cout << std::endl;
-  graph.addEdge(one, six);
-  graph.addEdge(one, five);
 
-  graph.addEdge(one, two);
-  graph.addEdge(two, three);
-  graph.addEdge(two, six);
-  // graph.addEdge(two, one);
-  
-  // graph.addEdge(two, four);
-  graph.addEdge(three, one);
-  
-  graph.addEdge(four, two);
-  // graph.addEdge(six, two);
-  
-  graph.addEdge(five, two);
-  graph.adjacencyList();
-  graph.neighbours(two);
-  graph.neighbours(one);
-  
-  std::cout<< std::endl;
-  std::cout << "Are neighboours: " << graph.areNeighbours(one, six) << std::endl;
-  std::cout<< std::endl;
-  std::cout<< "Degree of vetex two:" << std::endl;
-  std::cout << "Indegree: " << graph.inDegree(two) << std::endl;
-  std::cout << "OutDegree: " << graph.outDegree(two) << std::endl;
-  std::cout << "Degree: " << graph.degree(two) << std::endl;
-  
-  std::cout<< std::endl;
-  std::cout<< "Degree of vetex one:" << std::endl;
-  std::cout << "Indegree: " << graph.inDegree(one) << std::endl;
-  std::cout << "OutDegree: " << graph.outDegree(one) << std::endl;
-  std::cout << "Degree: " << graph.degree(one) << std::endl;
+  try {
+    Graph graph(false);
+    Vertex ktm(1011, "Kathmandu");
+    Vertex jhapa(7897, "Jhapa");
+    Vertex morang(7545, "Morang");
+    Vertex illam(4440, "Illam");
+    Vertex pokhara(3189, "Pokhara");
+    Vertex chitwan(5014, "Chitwan");
+    graph.addVertex(ktm);
+    graph.addVertex(jhapa);
+    graph.addVertex(morang);
+    std::cout << "\nVertices: ";
+    graph.vertices();
+    std::cout << "Total vertices: " << graph.totalVertices() << std::endl;
+    graph.addVertex(illam);
+    graph.addVertex(pokhara);
+    graph.addVertex(chitwan);
+    std::cout << "Vertices: ";
+    graph.vertices();
+    std::cout << "Total vertices: " << graph.totalVertices() << std::endl;
+    // std::cout << std::endl;
+    graph.addEdge(ktm, chitwan, 100);
+    graph.addEdge(ktm, pokhara, 200);
+    graph.addEdge(ktm, jhapa, 496);
+    graph.addEdge(jhapa, morang, 32);
+    graph.addEdge(jhapa, chitwan, 596);
+    graph.addEdge(morang, ktm, 496 - 32);
+    graph.addEdge(illam, jhapa, 75);
+    graph.addEdge(pokhara, jhapa, 696);
+    std::cout << "Adjacenecy List: " << std::endl;
+    graph.adjacencyList();
+    std::cout << "\nNeighbours of Jhapa: ";
+    graph.neighbours(jhapa);
+    std::cout << "\n";
+    std::cout << "Neighbours of Kathmandu: ";
+    graph.neighbours(ktm);
+    std::cout << "\n";
 
-  std::cout << "Total vertices: " << graph.totalVertices() << std::endl;
-  std::cout << "Total Edges: " << graph.totalEdges() << std::endl;
+    std::cout << std::endl;
 
-  std::cout<< graph.totalEdges();
+    std::cout << "Are neighbours(jhapa and ktm): "
+              << graph.areNeighbours(ktm, chitwan) << std::endl;
+    std::cout << "\n";
+    std::cout << "Degree of vetex Jhapa:" << std::endl;
+    std::cout << "Indegree: " << graph.inDegree(jhapa) << std::endl;
+    std::cout << "OutDegree: " << graph.outDegree(jhapa) << std::endl;
+    std::cout << "Degree: " << graph.degree(jhapa) << std::endl;
 
-  graph.removeEdge(five, two);
-  std::cout << "\nAfter removing five, two\n" << std::endl;
-  std::cout << "Total Edges: " << graph.totalEdges() << std::endl;
-  graph.adjacencyList();
+    std::cout << "Total Edges: " << graph.totalEdges() << std::endl;
 
-  graph.removeVertex(two);
-  std::cout << "\nAfter removing vertex two\n" << std::endl;
-  graph.adjacencyList();
-  std::cout << "Total vertices: " << graph.totalVertices() << std::endl;
+    graph.removeVertex(jhapa);
+    std::cout << "\nAfter removing vertex Jhapa" << std::endl;
+    std::cout << "Total vertices: " << graph.totalVertices() << std::endl;
 
-  graph.removeEdge(one, five);
-  std::cout << "\nAfter removing one, five\n" << std::endl;
-  std::cout << "Total Edges: " << graph.totalEdges() << std::endl;
-  graph.adjacencyList();
+    graph.removeEdge(ktm, pokhara);
+    std::cout << "\nAfter removing edge Ktm, Pokhara" << std::endl;
+    std::cout << "Total Edges: " << graph.totalEdges() << std::endl;
 
-  graph.removeVertex(three);
-  std::cout << "\nAfter removing vertex three\n" << std::endl;
-  graph.adjacencyList();
-  
+    graph.removeVertex(morang);
+    std::cout << "\nAfter removing vertex morang" << std::endl;
+    std::cout << "Total vertices: " << graph.totalVertices() << std::endl;
+    std::cout << "Total Edges: " << graph.totalEdges() << std::endl;
 
-  graph.removeVertex(four);
-  std::cout << "\nAfter removing vertex four\n" << std::endl;
-  graph.adjacencyList();
-  std::cout << "Total vertices: " << graph.totalVertices() << std::endl;
-  std::cout << "Total Edges: " << graph.totalEdges() << std::endl;
+    std::cout << "\nFinal Graph:" << std::endl;
+    graph.adjacencyList();
+  } catch (std::string error) {
+    std::cout << error << std::endl;
+  }
+
+  bool generate;
+  std::cout << "\nDo you want to generate a random graph?(1/0): ";
+  std::cin >> generate;
+  std::cout << "\nThe random graph will be a simple graph with no loop and no "
+               "multiple/"
+               "parallel edges\n "
+            << std::endl;
+
+  if (generate) {
+    int totalVertices;
+    int totalEdges;
+    bool isDirected;
+    std::cout << "Enter total number of vertices: ";
+    std::cin >> totalVertices;
+    std::cout << "Enter total number of edges: ";
+    std::cin >> totalEdges;
+    std::cout << "Directed or Unidirected(1/0): ";
+    std::cin >> isDirected;
+
+    try {
+      Graph random(totalVertices, totalEdges, isDirected);
+      std::cout << "\nTotal Edges: " << random.totalEdges() << std::endl;
+      std::cout << "Total vertices: " << random.totalVertices() << std::endl;
+    } catch (std::string error) {
+      std::cout << error << std::endl;
+    }
+  }
 }
